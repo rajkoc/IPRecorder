@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IP Recorder – korisničko uputstvo</title>
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #f5f6f8; --surface: #ffffff; --ink: #1c2330; --muted: #566074;
+  --line: #d9dde5; --accent: #1d4ed8; --chip: #e8ecf4; --warn: #fff4d6; --warn-line: #e3c25a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --surface: #1a1f28; --ink: #e6e9ef; --muted: #9aa4b5;
+    --line: #2c3340; --accent: #86a8ff; --chip: #262d3a; --warn: #33290f; --warn-line: #7a6320;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151b; --surface: #1a1f28; --ink: #e6e9ef; --muted: #9aa4b5;
+  --line: #2c3340; --accent: #86a8ff; --chip: #262d3a; --warn: #33290f; --warn-line: #7a6320;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+main { max-width: 48rem; margin: 0 auto; padding: 2rem 1.1rem 4rem; }
+h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .4rem; }
+h2 { font-size: 1.3rem; margin: 2.6rem 0 .6rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; margin: 1.5rem 0 .3rem; }
+p { margin: .6rem 0; max-width: 40rem; }
+.lead { color: var(--muted); font-size: 1.05rem; }
+a { color: var(--accent); }
+nav { margin: 1.4rem 0 0; padding: .9rem 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+nav a { display: inline-block; margin: .15rem .9rem .15rem 0; }
+ol, ul { padding-left: 1.3rem; max-width: 40rem; }
+li { margin: .3rem 0; }
+.ui { font-weight: 600; background: var(--chip); padding: 0 .35em; border-radius: 3px; white-space: nowrap; }
+code { font-family: Consolas, "Lucida Console", monospace; font-size: .92em; background: var(--chip); padding: 0 .3em; border-radius: 3px; word-break: break-all; }
+.scroll { overflow-x: auto; margin: .8rem 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; vertical-align: top; padding: .5rem .75rem; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { background: var(--chip); font-weight: 600; white-space: nowrap; }
+td:first-child { min-width: 11rem; }
+.note { background: var(--warn); border-left: 4px solid var(--warn-line); padding: .6rem .9rem; margin: 1rem 0; max-width: 40rem; border-radius: 0 6px 6px 0; }
+.dot { display: inline-block; width: .85rem; height: .85rem; border-radius: 50%; border: 1px solid rgba(0,0,0,.45); vertical-align: -.1rem; margin-right: .45rem; }
+.g { background: #1faa3c; } .gr { background: #9a9a9a; } .y { background: #e6b800; }
+.r { background: #e00000; } .o { background: #ff8c00; } .dr { background: #600000; }
+.meter { display: inline-flex; gap: 2px; align-items: flex-end; height: 1.1rem; vertical-align: -.2rem; margin: 0 .3rem; }
+.meter i { display: block; width: 4px; background: linear-gradient(to top, #19c43a 0 60%, #e6c700 60% 85%, #e03030 85%); }
+footer { margin-top: 3rem; color: var(--muted); font-size: .9rem; }
+@media print {
+  body { background: #fff; color: #000; font-size: 11pt; }
+  main { max-width: none; padding: 0; }
+  nav { display: none; }
+  .scroll { border-color: #bbb; overflow: visible; }
+  h2 { break-after: avoid; } .scroll, .note { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>IP Recorder – korisničko uputstvo</h1>
+<p class="lead">Program snima proizvoljan broj IP video strimova (kamere, enkoderi, multicast) u WMV ili H.264 MP4, po rasporedu i bez prozora u pozadini.</p>
+
+<nav aria-label="Sadržaj">
+  <a href="#kako">Kako radi</a>
+  <a href="#start">Brzi početak</a>
+  <a href="#prozor">Glavni prozor</a>
+  <a href="#podesavanja">Podešavanja</a>
+  <a href="#format">Format snimka</a>
+  <a href="#raspored">Raspored</a>
+  <a href="#monitor">Monitor</a>
+  <a href="#brisanje">Brisanje starih snimaka</a>
+  <a href="#url">Adrese strimova</a>
+  <a href="#fajlovi">Fajlovi</a>
+  <a href="#problemi">Rešavanje problema</a>
+</nav>
+
+<h2 id="kako">Kako program radi</h2>
+<p>Program ima dva dela koja rade nezavisno:</p>
+<ul>
+  <li><b>Prozor</b> – služi za podešavanja, pregled stanja i upravljanje. Možete ga zatvoriti i ponovo otvoriti kad god želite.</li>
+  <li><b>Servis</b> – pozadinski proces bez prozora koji stvarno snima i izvršava raspored. Radi i kad je prozor zatvoren.</li>
+</ul>
+<p>Snimanje obavlja <b>ffmpeg</b>, pa <code>ffmpeg.exe</code> mora da postoji na računaru.</p>
+
+<h2 id="start">Brzi početak</h2>
+<ol>
+  <li>Stavite <code>ffmpeg.exe</code> u isti folder kao program, ili ga izaberite u polju <span class="ui">ffmpeg putanja</span> (dugme <span class="ui">Izaberi...</span>).</li>
+  <li>Pokrenite program (<code>IPRecorder.exe</code> ili <code>start_recorder.vbs</code>).</li>
+  <li>U polju <span class="ui">Folder za snimke</span> izaberite gde će se snimci čuvati.</li>
+  <li>U prvom redu liste strimova upišite <b>naziv</b> kamere i njen <b>URL</b> (vidi <a href="#url">Adrese strimova</a>). Kvačica sa leve strane mora biti uključena.</li>
+  <li>Izaberite <span class="ui">Format snimka</span> i po potrebi bitrate i rezoluciju.</li>
+  <li>Kliknite <span class="ui">Start</span> pored kamere ili <span class="ui">▶ Pokreni sve</span>. Servis se sam pokrene ako već ne radi.</li>
+</ol>
+<p>Kad se kružić pored kamere zacrveni i trepće, snimanje je u toku. Prozor sada možete zatvoriti.</p>
+
+<h2 id="prozor">Glavni prozor</h2>
+
+<h3>Servis</h3>
+<div class="scroll"><table>
+<tr><th>Element</th><th>Šta radi</th></tr>
+<tr><td><span class="ui">Pokreni servis</span> / <span class="ui">Zaustavi servis</span></td><td>Uključuje i isključuje pozadinski servis. Zaustavljanje servisa prekida sva snimanja (program prvo pita za potvrdu).</td></tr>
+<tr><td><span class="ui">Sacuvaj i primeni</span></td><td>Čuva podešavanja i šalje ih servisu. Koristite ga posle izmene <b>rasporeda</b>, <b>brisanja starih snimaka</b> i <b>ograničenja procesora</b>.</td></tr>
+<tr><td><span class="ui">Automatski pokreni servis pri prijavi na Windows</span></td><td>Servis se pokreće čim se korisnik prijavi na Windows (ne pri samom paljenju računara).</td></tr>
+</table></div>
+<p>Zatvaranje prozora <b>ne zaustavlja</b> snimanje. Snimanje se zaustavlja samo preko <span class="ui">Stop</span>, <span class="ui">■ Zaustavi sve</span>, <span class="ui">Zaustavi servis</span> ili rasporedom.</p>
+<p>Ako piše <b>„Servis radi – STARA VERZIJA“</b>, servis je pokrenut pre zamene programa. Prihvatite ponuđeni restart (ili kliknite <span class="ui">Zaustavi servis</span>, pa <span class="ui">Pokreni servis</span>).</p>
+
+<h3>Lista strimova</h3>
+<p>Svaki red ima kvačicu (uključena kamera), naziv, URL, indikator stanja i dugme <span class="ui">Start</span>/<span class="ui">Stop</span>. Ispod URL-a se vide vreme i veličina snimka, a u slučaju greške i njen opis. <span class="ui">▶ Pokreni sve</span> pokreće kamere koje imaju kvačicu i upisan URL.</p>
+<p><b>Dodavanje i brisanje strimova:</b> dugme <span class="ui">+ Dodaj strim</span> (dole levo) dodaje novi red, a dugme <span class="ui">×</span> na kraju reda ga briše (program prvo pita za potvrdu). Ako se taj strim snima, snimanje se zaustavlja, a već snimljeni fajlovi se ne brišu. Lista prikazuje 5 redova, a za ostale se koristi klizač. Možete imati najviše 32 strima, uvek mora ostati bar jedan, a <b>nazivi moraju biti različiti</b>.</p>
+<p>Izmene podešavanja važe od sledećeg pritiska na <span class="ui">Start</span> te kamere. Snimanje koje je već u toku ostaje sa starim podešavanjima.</p>
+
+<h3>Značenje indikatora</h3>
+<div class="scroll"><table>
+<tr><th>Indikator</th><th>Značenje</th></tr>
+<tr><td><span class="dot gr"></span>sivi</td><td>Zaustavljeno</td></tr>
+<tr><td><span class="dot y"></span>žuti</td><td>Povezivanje na izvor</td></tr>
+<tr><td><span class="dot r"></span>crveni, treperi</td><td><b>Snimanje je u toku</b></td></tr>
+<tr><td><span class="dot o"></span>narandžasti</td><td>Veza je pukla, program se ponovo povezuje</td></tr>
+<tr><td><span class="dot dr"></span>tamnocrveni</td><td>Greška (opis je ispod URL-a)</td></tr>
+<tr><td><span class="dot g"></span>zeleni (kod servisa)</td><td>Servis radi. Sivi = ne radi, narandžasti = stara verzija.</td></tr>
+</table></div>
+<p>Dole desno prozor ispisuje i ukupno stanje, npr. <b>„● SNIMANJE U TOKU (3/5)“</b>.</p>
+
+<h2 id="podesavanja">Podešavanja snimanja</h2>
+<div class="scroll"><table>
+<tr><th>Polje</th><th>Opis</th><th>Podrazumevano</th></tr>
+<tr><td><span class="ui">Video bitrate (kbps)</span></td><td>Ciljni protok slike. Ne važi za format „bez rekodiranja“.</td><td>1500</td></tr>
+<tr><td><span class="ui">Audio bitrate (kbps)</span></td><td>Protok zvuka. <b>0</b> = snimanje bez zvuka.</td><td>128</td></tr>
+<tr><td><span class="ui">Rezolucija</span></td><td><b>Original</b> ili npr. <code>1280x720</code>. Možete upisati sopstvenu.</td><td>Original</td></tr>
+<tr><td><span class="ui">FPS</span></td><td>Broj kadrova u sekundi. <b>0</b> = kao u izvoru.</td><td>0</td></tr>
+<tr><td><span class="ui">Deljenje fajla na svakih (min)</span></td><td>Trajanje jednog fajla. <b>0</b> = jedan veliki fajl. Za 2 sata upišite 120.</td><td>120</td></tr>
+<tr><td><span class="ui">Deli na pun sat</span></td><td>Fajlovi se seku na okrugle sate računara (00:00, 02:00, 04:00…), kao kod DVR-a. Ako počnete u 23:00, prvi fajl traje do 00:00. Trajanje treba da se ravnomerno deli na 24 h (60, 120, 180, 240, 360, 480, 720 ili 1440 min).</td><td>uključeno</td></tr>
+<tr><td><span class="ui">Sablon imena (strftime)</span></td><td>Ime fajla je <i>naziv kamere + _ + šablon</i>. Oznake: <code>%Y</code> godina, <code>%m</code> mesec, <code>%d</code> dan, <code>%H</code> sat, <code>%M</code> minut, <code>%S</code> sekund. Primer: <code>Kamera1_2026-09-30_02-00-00.wmv</code></td><td><code>%Y-%m-%d_%H-%M-%S</code></td></tr>
+<tr><td><span class="ui">Folder za snimke</span></td><td>Gde se snimci čuvaju.</td><td>Snimci u korisničkom folderu</td></tr>
+<tr><td><span class="ui">Poseban folder za svaku kameru</span></td><td>Pravi podfolder sa nazivom kamere.</td><td>uključeno</td></tr>
+<tr><td><span class="ui">RTSP transport</span></td><td><b>tcp</b> je pouzdaniji. Probajte <b>udp</b> samo ako kamera ne radi sa tcp.</td><td>tcp</td></tr>
+<tr><td><span class="ui">Automatsko ponovno povezivanje</span></td><td>Posle prekida veze program sam pokušava ponovo, na svakih <span class="ui">posle (s)</span> sekundi.</td><td>uključeno, 5 s</td></tr>
+<tr><td><span class="ui">Maks. CPU za sve strimove zajedno (%)</span></td><td>Tvrdi limit procesora za sve snimke zajedno. <b>0</b> = bez limita. Radi samo na <b>Windows 8 i novijim</b>. Prenizak limit izaziva zaostajanje i gubitak kadrova.</td><td>0</td></tr>
+<tr><td><span class="ui">Prioritet</span></td><td>Prioritet ffmpeg procesa. „Ispod normalnog“ ne ometa ostale programe.</td><td>Ispod normalnog</td></tr>
+<tr><td><span class="ui">Niti po strimu</span></td><td>Koliko jezgara jedan strim sme da koristi. <b>0</b> = automatski. Na slabijem procesoru probajte 2.</td><td>0</td></tr>
+<tr><td><span class="ui">ffmpeg putanja</span></td><td>Putanja do <code>ffmpeg.exe</code>. Ako je u istom folderu ili u PATH-u, dovoljno je <code>ffmpeg</code>.</td><td>ffmpeg</td></tr>
+</table></div>
+
+<h2 id="format">Format snimka</h2>
+<div class="scroll"><table>
+<tr><th>Format</th><th>Kada ga koristiti</th></tr>
+<tr><td><b>WMV</b></td><td>Najširi izbor za stare plejere. Kvalitet po bitrate-u je slabiji, a procesor se opterećuje rekodiranjem.</td></tr>
+<tr><td><b>H.264 MP4</b></td><td>Bolji kvalitet za isti bitrate. Ffmpeg mora imati H.264 enkoder (libx264). <span class="ui">x264 preset</span>: <b>ultrafast</b> najmanje opterećuje procesor, a <b>medium</b> daje najbolju sliku. <span class="ui">Fragmentirani MP4</span> čuva fajl ispravnim i ako se snimanje naglo prekine; neki stariji plejeri ga ne reprodukuju, pa ga tada isključite.</td></tr>
+<tr><td><b>H.264 MP4 (bez rekodiranja)</b></td><td>Slika iz kamere se prepisuje direktno u MP4: <b>skoro bez opterećenja procesora</b>, najbolje za 4–5 kamera. Bitrate, rezolucija i FPS ne važe. Izvor mora biti H.264 (ili H.265), inače program javlja grešku. Zvuk se uvek prebacuje u AAC. Rez fajla pada na prvi ključni kadar posle punog sata, pa tačnost zavisi od kamere (interval ključnih kadrova, GOP, podešava se u kameri).</td></tr>
+</table></div>
+
+<h2 id="raspored">Raspored snimanja</h2>
+<p>Raspored sam uključuje i isključuje snimanje svih uključenih kamera.</p>
+<ol>
+  <li>Uključite <span class="ui">Ukljuci raspored</span>.</li>
+  <li>Upišite <span class="ui">Pocetak (HH:MM)</span> i <span class="ui">Kraj (HH:MM)</span>, npr. <code>22:00</code> i <code>06:00</code>.</li>
+  <li>Izaberite dane (<span class="ui">Dani</span>) i kliknite <span class="ui">Sacuvaj i primeni</span>.</li>
+</ol>
+<ul>
+  <li>Prozor može da pređe preko ponoći. Dani se odnose na dan u kome snimanje <b>počinje</b>.</li>
+  <li>Ako uključite raspored dok ste već unutar vremena snimanja, snimanje počinje odmah.</li>
+  <li>Početak i kraj ne smeju biti isti. Za neprekidno snimanje ne uključujte raspored.</li>
+  <li>Raspored radi <b>samo dok je servis pokrenut</b>. Za potpuno automatski rad uključite i automatski start servisa.</li>
+  <li>Ručni <span class="ui">Start</span>/<span class="ui">Stop</span> radi i dalje. Raspored deluje samo u trenutku početka i kraja.</li>
+</ul>
+
+<h2 id="monitor">Monitor</h2>
+<p>Mali prikaz uživo jednog kanala. U listi <span class="ui">Kanal</span> izaberite kameru (ili <b>Iskljuceno</b>). <span class="ui">Osvezi</span> ponovo pokreće prikaz, na primer posle izmene URL-a.</p>
+<p>Uz desnu ivicu slike su dve uske linije<span class="meter" aria-hidden="true"><i style="height:90%"></i><i style="height:60%"></i></span>koje pokazuju nivo zvuka levog i desnog kanala: zeleno je normalan nivo, žuto je jak (od −18 dB), crveno je preglasno (od −6 dB), a bela crtica pamti najveću vrednost.</p>
+<div class="note">Monitor otvara <b>dodatnu vezu</b> ka kameri i troši procesor. Ako snimanje počne da pada kad uključite monitor, kamera verovatno ograničava broj veza. Monitor radi samo dok je prozor otvoren, a kad vam ne treba, izaberite <b>Iskljuceno</b>.</div>
+
+<h2 id="brisanje">Brisanje starih snimaka</h2>
+<p>U polju <span class="ui">Brisanje starih snimaka</span> upišite broj dana (npr. 30 ili 35) i kliknite <span class="ui">Sacuvaj i primeni</span>. Program će vas jednom pitati za potvrdu. Servis zatim briše stare snimke odmah i dalje na svaki sat. <b>0</b> isključuje brisanje.</p>
+<ul>
+  <li>Briše samo <code>.wmv</code> i <code>.mp4</code> fajlove u folderu za snimke i njegovim direktnim podfolderima.</li>
+  <li>Briše samo fajlove čije ime počinje nazivom neke kamere i znakom <code>_</code>. Tuđi fajlovi ostaju netaknuti.</li>
+  <li>Briše se po vremenu poslednje izmene fajla.</li>
+</ul>
+<div class="note">Brisanje je <b>trajno</b> (fajlovi ne idu u korpu). Ako ste kameru preimenovali, snimci pod starim imenom se ne brišu automatski.</div>
+
+<h2 id="url">Adrese strimova</h2>
+<div class="scroll"><table>
+<tr><th>Vrsta</th><th>Primer</th></tr>
+<tr><td>RTSP kamera</td><td><code>rtsp://korisnik:lozinka@192.168.1.10:554/stream1</code></td></tr>
+<tr><td>Multicast (UDP)</td><td><code>udp://239.1.1.1:5000?fifo_size=5000000&amp;overrun_nonfatal=1</code></td></tr>
+<tr><td>Multicast 232.x.x.x (SSM)</td><td><code>udp://232.0.12.9:5000?sources=IP_IZVORA&amp;localaddr=IP_VASE_KARTICE&amp;fifo_size=5000000&amp;overrun_nonfatal=1</code></td></tr>
+</table></div>
+<p>Adrese u opsegu <b>232.x.x.x</b> su rezervisane za <i>source-specific multicast</i> i traže IP adresu pošiljaoca (<code>sources=</code>). Zato ih VLC ne otvori bez izvora. Tačna adresa izvora obično piše u podešavanjima enkodera. Ovo je sintaksa ffmpeg-a, proverite je na svom strimu.</p>
+
+<h2 id="fajlovi">Fajlovi koje program pravi</h2>
+<p>Svi su pored programa.</p>
+<ul>
+  <li><code>ip_recorder_settings.json</code> – sva podešavanja.</li>
+  <li><code>ip_recorder_service.log</code> – dnevnik servisa: početak i prekid snimanja, restarti, brisanje starih snimaka, greške.</li>
+  <li><code>ip_recorder_error.log</code> – greške samog prozora.</li>
+</ul>
+<p>Program držite u folderu u koji korisnik sme da piše (ne u <code>C:\Program Files</code>).</p>
+
+<h2 id="problemi">Rešavanje problema</h2>
+<div class="scroll"><table>
+<tr><th>Problem</th><th>Rešenje</th></tr>
+<tr><td>Ispod kamere piše grešku</td><td>Pročitajte poruku. Najčešće je pogrešan URL, korisničko ime ili lozinka, ili <b>ffmpeg nije pronađen</b>.</td></tr>
+<tr><td>Piše „Servis nije pokrenut“</td><td>Kliknite <span class="ui">Pokreni servis</span>. Ako se ne pokrene, pogledajte <code>ip_recorder_service.log</code>.</td></tr>
+<tr><td>Snima WMV iako je izabran MP4</td><td>Servis je stara verzija. Zaustavite ga i ponovo pokrenite, pa kliknite <span class="ui">Sacuvaj i primeni</span> i ponovo <span class="ui">Start</span>.</td></tr>
+<tr><td>Procesor je preopterećen</td><td>Smanjite rezoluciju i FPS, izaberite <b>H.264 MP4 (bez rekodiranja)</b>, spustite <b>x264 preset</b> na ultrafast, ograničite broj niti, ili podesite limit procesora (Windows 8+).</td></tr>
+<tr><td>Kamera nema mikrofon</td><td>Program sam snima samo sliku i prikaže poruku „Izvor nema zvuk“.</td></tr>
+<tr><td>Fajl se ne seče tačno na pun sat</td><td>U režimu „bez rekodiranja“ rez čeka ključni kadar kamere. Skratite interval ključnih kadrova u podešavanjima kamere.</td></tr>
+<tr><td>Monitor piše „Nema signala“</td><td>Proverite URL. Kamera možda ne dozvoljava dodatnu vezu.</td></tr>
+<tr><td>Strim radi u vMix-u, a ne u VLC-u ili programu</td><td>Proverite da li je adresa multicast 232.x.x.x (vidi <a href="#url">Adrese strimova</a>) i da je izabrana ispravna mrežna kartica (<code>localaddr</code>).</td></tr>
+<tr><td>Prozor se ne otvara, greška „init.tcl“</td><td>Python instalacija nema Tcl/Tk. Ponovo pokrenite instalaciju Pythona, izaberite <b>Modify</b> i uključite <b>tcl/tk and IDLE</b>. Exe verzija nema ovaj problem.</td></tr>
+<tr><td>Antivirus briše ili blokira exe</td><td>Dodajte folder sa programom u izuzetke antivirusa.</td></tr>
+</table></div>
+
+<footer>IP Recorder – snimanje pomoću ffmpeg-a. Podešavanja se čuvaju automatski.</footer>
+</main>
+</body>
+</html>

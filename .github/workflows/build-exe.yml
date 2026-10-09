@@ -1,0 +1,25 @@
+name: Build exe
+
+on:
+  workflow_dispatch:   # dugme "Run workflow" na GitHub-u
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'   # radi i na Windows 7
+
+      - name: Instalacija PyInstaller-a
+        run: python -m pip install pyinstaller==5.13.2
+
+      - name: Pravljenje exe-a
+        run: pyinstaller --clean --onefile --noconsole --name IPRecorder ip_recorder.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IPRecorder
+          path: dist/IPRecorder.exe

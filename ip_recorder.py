@@ -75,7 +75,8 @@ VISIBLE_ROWS = 5      # toliko redova je vidljivo, dalje se skroluje
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])),
                            "ip_recorder_settings.json")
 
-APP_VERSION = 14  # povecava se kad se promeni ponasanje servisa; prozor poredi sa servisom
+CONFIG_VERSION = 2   # v2: fragmentirani MP4 je podrazumevano ISKLJUCEN (losi za Edius/Premiere/Explorer)
+APP_VERSION = 15  # povecava se kad se promeni ponasanje servisa; prozor poredi sa servisom
 
 CODEC_WMV = "WMV"
 CODEC_MP4 = "H.264 MP4"
@@ -108,7 +109,8 @@ DEFAULTS = {
     "folder": os.path.join(os.path.expanduser("~"), "Snimci"),
     "codec": CODEC_WMV,
     "x264_preset": "veryfast",
-    "mp4_fragmented": True,
+    "mp4_fragmented": False,
+    "config_version": CONFIG_VERSION,
     "keep_days": "0",
     "video_kbps": "1500",
     "audio_kbps": "128",
@@ -585,6 +587,9 @@ def load_config():
                     cfg["streams"] = normalize_streams(v)
             else:
                 cfg[k] = v
+        if int(saved.get("config_version", 1)) < CONFIG_VERSION:
+            cfg["mp4_fragmented"] = False  # jednokratno: stara podrazumevana vrednost je bila ukljucena
+        cfg["config_version"] = CONFIG_VERSION
     except Exception:
         pass
     return cfg
@@ -1338,6 +1343,7 @@ class App(tk.Tk if tk else object):
             "codec": self.v_codec.get(),
             "x264_preset": self.v_preset.get(),
             "mp4_fragmented": self.v_frag.get(),
+            "config_version": CONFIG_VERSION,
             "keep_days": self.v_keep.get().strip(),
             "video_kbps": self.v_vb.get().strip(),
             "audio_kbps": self.v_ab.get().strip(),
@@ -1502,7 +1508,7 @@ class App(tk.Tk if tk else object):
         self.cb_preset = ttk.Combobox(fmt, textvariable=self.v_preset, values=X264_PRESETS,
                                       width=10, state="readonly")
         self.cb_preset.pack(side="left")
-        self.cb_frag = ttk.Checkbutton(fmt, text="Fragmentirani MP4 (siguran pri prekidu)",
+        self.cb_frag = ttk.Checkbutton(fmt, text="Fragmentirani MP4 (nije za editovanje)",
                                        variable=self.v_frag)
         self.cb_frag.pack(side="left", padx=(14, 0))
         ret = ttk.Frame(box)
